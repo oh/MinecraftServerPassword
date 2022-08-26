@@ -3,21 +3,22 @@
 // MinecraftServerPassword allows users to set a password for their server to disallow unknown users from moving,
 // breaking blocks, or chatting. Once a user has entered the password once, they will be added to a whitelist and will
 // not have to enter the password again upon joining the server.
+//
 
-package host.hunters.minecraftserverpassword;
+package host.hunters.minecraftserverpassword
 
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit
+import org.bukkit.plugin.java.JavaPlugin
 
-public final class MinecraftServerPassword extends JavaPlugin {
-
-    @Override
-    public void onEnable() {
+class MinecraftServerPassword : JavaPlugin() {
+    override fun onEnable() {
         // Plugin startup logic
-
+        logger.info("MinecraftServerPassword has loaded.")
+        val pm = Bukkit.getServer().pluginManager
+        pm.registerEvents(JoinEvent(), this)
     }
 
-    @Override
-    public void onDisable() {
+    override fun onDisable() {
         // Plugin shutdown logic
     }
 }
