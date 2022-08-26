@@ -1,0 +1,4 @@
+name: MinecraftServerPassword
+version: '${version}'
+main: host.hunters.minecraftserverpassword.MinecraftServerPassword
+api-version: 1.19
