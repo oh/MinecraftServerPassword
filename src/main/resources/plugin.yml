@@ -2,3 +2,13 @@ name: MinecraftServerPassword
 version: '${version}'
 main: host.hunters.minecraftserverpassword.MinecraftServerPassword
 api-version: 1.19
+authors: [hunterwebbs, insyri]
+commands:
+  setpassword:
+    description: Set the password for the server.
+    usage: /<command> [password]
+    aliases: [setpass, sp]
+  whitelistadd:
+    description: Manually add a user to the whitelist.
+    usage: /<command> [username]
+    aliases: [wladd]

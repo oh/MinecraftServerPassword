@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
-    kotlin("jvm") version "1.7.10";
+    kotlin("jvm") version "1.7.10"
 }
 
 group = "host.hunters"
@@ -21,6 +21,7 @@ repositories {
 }
 
 dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
     implementation(kotlin("stdlib-jdk8"))
