@@ -1,9 +1,17 @@
 package host.hunters.minecraftserverpassword
 
 import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
+import org.bukkit.GameMode
+import org.bukkit.command.CommandException
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.permissions.Permission
+import org.bukkit.permissions.PermissionAttachment
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 
 class JoinEvent(private val plugin: MinecraftServerPassword) : Listener {
     @EventHandler
@@ -19,9 +27,31 @@ class JoinEvent(private val plugin: MinecraftServerPassword) : Listener {
         @Suppress("UNCHECKED_CAST")
         val whitelist : ArrayList<String> = plugin.config.getList("whitelistedUsers") as ArrayList<String>
         for (user in whitelist) {
-            if (user == p.uniqueId.toString()) return
+            if (user == p.uniqueId.toString()) {
+                val attachment : PermissionAttachment = p.addAttachment(plugin)
+
+                plugin.attachments[p.uniqueId] = attachment
+                plugin.attachments[p.uniqueId]?.setPermission("serverpassword.whitelisted", true)
+
+                return
+            }
         }
 
+        if (event.player.hasPermission("serverpassword.whitelisted")) return
+
+        p.gameMode = GameMode.ADVENTURE
+        p.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, Int.MAX_VALUE, 1))
+        p.walkSpeed = 0F
         p.sendMessage("You are not on the whitelist. Send a message with the server password to be added to the whitelist.")
+
+    }
+
+    @EventHandler
+    fun onMovement(event: PlayerMoveEvent) {
+        if (event.player.hasPermission("serverpassword.whitelisted")) return
+
+        event.isCancelled = true
+
+        return
     }
 }

@@ -7,14 +7,18 @@
 
 package host.hunters.minecraftserverpassword
 
-import org.bukkit.Bukkit
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.event.Listener
+import org.bukkit.permissions.PermissionAttachment
 import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.java.JavaPlugin
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class MinecraftServerPassword : JavaPlugin(), Listener {
     private lateinit var pm : PluginManager
+    var attachments : HashMap<UUID, PermissionAttachment> = HashMap()
 
     override fun onEnable() {
         val config : FileConfiguration = config
@@ -37,7 +41,7 @@ class MinecraftServerPassword : JavaPlugin(), Listener {
         saveConfig()
 
         logger.info("MinecraftServerPassword has loaded.")
-        this.pm = Bukkit.getServer().pluginManager
+        this.pm = server.pluginManager
         pm.registerEvents(JoinEvent(this), this)
         pm.registerEvents(OnMessage(this), this)
 
