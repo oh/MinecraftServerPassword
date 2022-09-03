@@ -25,7 +25,7 @@ class OnMessage(private val plugin : MinecraftServerPassword) : Listener {
 
         if (whitelist.contains(p.uniqueId.toString())) return
 
-        if (event.message().asComponent() == Component.text(plugin.config.get("password") as String)) {
+        if (event.message().asComponent() == Component.text(plugin.config.get("password").toString())) {
 
             whitelist.add(p.uniqueId.toString())
             plugin.config.set("whitelistedUsers", whitelist)

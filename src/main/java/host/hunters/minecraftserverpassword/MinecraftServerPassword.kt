@@ -22,6 +22,7 @@ class MinecraftServerPassword : JavaPlugin(), Listener {
 
     override fun onEnable() {
         val config : FileConfiguration = config
+        // TODO: Refactor this
         if (config.getString("password") == null) {
             config.addDefault("password", "yourServerPassword")
         }
