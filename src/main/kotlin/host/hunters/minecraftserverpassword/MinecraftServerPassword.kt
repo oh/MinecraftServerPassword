@@ -7,7 +7,6 @@
 
 package host.hunters.minecraftserverpassword
 
-import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.event.Listener
 import org.bukkit.permissions.PermissionAttachment
 import org.bukkit.plugin.PluginManager
@@ -21,22 +20,12 @@ class MinecraftServerPassword : JavaPlugin(), Listener {
     var attachments : HashMap<UUID, PermissionAttachment> = HashMap()
 
     override fun onEnable() {
-        val config : FileConfiguration = config
-        // TODO: Refactor this
-        if (config.getString("password") == null) {
-            config.addDefault("password", "yourServerPassword")
-        }
-        if (config.getString("allowedAttempts") == null) {
-            config.addDefault("allowedAttempts", 3)
-        }
-        if (config.getList("whitelistedUsers") == null) {
-            val list : ArrayList<String> = ArrayList()
-            config.addDefault("whitelistedUsers", list)
-        }
-        if (config.getList("blacklistedUsers") == null) {
-            val list : ArrayList<String> = ArrayList()
-            config.addDefault("blacklistedUsers", list)
-        }
+        // TODO: Refactor this..?
+        if (config.getString("password") == null)        config.addDefault("password", "yourServerPassword")
+        if (config.getString("allowedAttempts") == null) config.addDefault("allowedAttempts", 3)
+        if (config.getList("whitelistedUsers") == null)  config.addDefault("whitelistedUsers", ArrayList<String>())
+        if (config.getList("blacklistedUsers") == null)  config.addDefault("blacklistedUsers", ArrayList<String>())
+        if (config.get("allPlayerAttemptsLeft") == null)   config.addDefault("allPlayerAttemptsLeft", HashMap<UUID, Int>())
 
         config.options().copyDefaults(true)
         saveConfig()

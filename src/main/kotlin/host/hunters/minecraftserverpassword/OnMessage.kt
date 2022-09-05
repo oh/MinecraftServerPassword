@@ -22,9 +22,25 @@ class OnMessage(private val plugin : MinecraftServerPassword) : Listener {
 
     @EventHandler
     fun onMessage(event : AsyncChatEvent) {
+        @Suppress("UNCHECKED_CAST")
+        val allPlayerAttemptsLeft = plugin.config.getMapList("allPlayerAttemptsLeft") as HashMap<String, Int>
 
-        if (whitelist.contains(event.player.uniqueId.toString())) return
+        // Maybe error log?
+        val playerAttemptsLeft = allPlayerAttemptsLeft[event.player.uniqueId.toString()] ?: return
 
+        // Prevents messages from whitelisted users being sent to non-whitelisted users
+        if (whitelist.contains(event.player.uniqueId.toString())) {
+            for (p : Player in Bukkit.getOnlinePlayers()) {
+                if (whitelist.contains(p.uniqueId.toString())) {
+                    println("whitelisted")
+                    continue
+                }
+                event.viewers().remove(p)
+                println("${p.name} not whitelisted")
+            }
+        }
+
+        // Prevents messages from non-whitelisted user from being sent to other users
         for (p : Player in Bukkit.getOnlinePlayers()) {
             event.viewers().remove(p)
         }
@@ -35,7 +51,7 @@ class OnMessage(private val plugin : MinecraftServerPassword) : Listener {
             plugin.config.set("whitelistedUsers", whitelist)
             plugin.saveConfig()
 
-            if (event.player.hasPermission("serverpassword.whitelisted")) {
+            if (whitelist.contains(event.player.uniqueId.toString())) {
                 println("working")
                 plugin.server.scheduler.runTaskLater(plugin, Runnable {
                     run {
@@ -62,6 +78,6 @@ class OnMessage(private val plugin : MinecraftServerPassword) : Listener {
             }, 1L)
         }
 
-        event.player.sendMessage("The password you entered is incorrect. You have $attempts attempts left.")
+        event.player.sendMessage("The password you entered is incorrect. You have $playerAttemptsLeft attempts left.")
     }
 }

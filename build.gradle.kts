@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
     compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
     implementation(kotlin("stdlib-jdk8"))
