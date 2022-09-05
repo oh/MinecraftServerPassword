@@ -48,9 +48,6 @@ class JoinEvent(private val plugin: MinecraftServerPassword) : Listener {
     @EventHandler
     fun onMovement(event: PlayerMoveEvent) {
         if (event.player.hasPermission("serverpassword.whitelisted")) return
-
         event.isCancelled = true
-
-        return
     }
 }

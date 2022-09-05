@@ -12,8 +12,6 @@ import java.util.ArrayList
 
 class OnMessage(private val plugin : MinecraftServerPassword) : Listener {
 
-    private var attempts : Int = plugin.config.get("allowedAttempts") as Int
-
     @Suppress("UNCHECKED_CAST")
     private val whitelist : ArrayList<String> = plugin.config.getList("whitelistedUsers") as ArrayList<String>
 
@@ -53,29 +51,31 @@ class OnMessage(private val plugin : MinecraftServerPassword) : Listener {
 
             if (whitelist.contains(event.player.uniqueId.toString())) {
                 println("working")
-                plugin.server.scheduler.runTaskLater(plugin, Runnable {
+                plugin.server.scheduler.runTask(plugin, Runnable {
                     run {
+                        event.player.exp = 1000F
                         event.player.removePotionEffect(PotionEffectType.BLINDNESS)
                         event.player.gameMode = GameMode.SURVIVAL
                         event.player.walkSpeed = 0.2F
                     }
-                }, 1L)
+                })
             } else println("not working")
 
             event.player.sendMessage("You have been added to the whitelist.")
         }
 
-        attempts--
+        allPlayerAttemptsLeft[event.player.uniqueId.toString()] = playerAttemptsLeft - 1
+        plugin.saveConfig()
 
-        if (attempts >= 0) {
+        if (playerAttemptsLeft == 0) {
             blacklist.add(event.player.uniqueId.toString())
             plugin.config.set("blacklistedUsers", blacklist)
             plugin.saveConfig()
-            plugin.server.scheduler.runTaskLater(plugin, Runnable {
+            plugin.server.scheduler.runTask(plugin, Runnable {
                 run {
                     event.player.kick(Component.text("You have incorrectly attempted the password too many times and have been blacklisted."))
                 }
-            }, 1L)
+            })
         }
 
         event.player.sendMessage("The password you entered is incorrect. You have $playerAttemptsLeft attempts left.")

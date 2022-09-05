@@ -17,7 +17,6 @@ import kotlin.collections.HashMap
 
 class MinecraftServerPassword : JavaPlugin(), Listener {
     private lateinit var pm : PluginManager
-    var attachments : HashMap<UUID, PermissionAttachment> = HashMap()
 
     override fun onEnable() {
         // TODO: Refactor this..?
