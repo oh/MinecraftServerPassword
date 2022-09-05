@@ -2,7 +2,9 @@ package host.hunters.minecraftserverpassword
 
 import io.papermc.paper.event.player.AsyncChatEvent
 import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.potion.PotionEffectType
@@ -23,7 +25,11 @@ class OnMessage(private val plugin : MinecraftServerPassword) : Listener {
 
         val p = event.player
 
-        if (whitelist.contains(p.uniqueId.toString())) return
+        if (whitelist.contains(event.player.uniqueId.toString())) return
+
+        for (p : Player in Bukkit.getOnlinePlayers()) {
+            event.viewers().remove(p)
+        }
 
         if (event.message().asComponent() == Component.text(plugin.config.get("password").toString())) {
 

@@ -27,6 +27,11 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
 tasks.withType<Jar> {
     // Otherwise you'll get a "No main manifest attribute" error
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
